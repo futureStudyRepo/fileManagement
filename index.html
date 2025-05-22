@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생을 위한 효과적인 파일 관리 가이드</title>
+    <!-- Application Structure Plan: 
+        Single-page application with a sticky top navigation bar for jumping to main sections ('파일 관리의 중요성', '효과적인 파일 관리 방법'의 각 소항목). 
+        '파일 관리의 중요성' 섹션은 각 중요성을 아이콘과 함께 카드로 표시하여 시각적 이해를 돕습니다. 
+        '효과적인 파일 관리 방법' 섹션은 각 방법을 명확한 설명과 예시(코드 블록 스타일)를 포함한 카드로 구성하여 단계별 학습을 지원합니다. 
+        전체적으로 깔끔하고 사용자 친화적인 인터페이스를 통해 가이드 내용을 효과적으로 전달하는 것을 목표로 합니다.
+    -->
+    <!-- Visualization & Content Choices:
+        - 파일 관리의 중요성 (5가지): Goal: Inform. Viz/Presentation: Tailwind CSS를 사용한 카드 그리드. 각 카드에는 유니코드 아이콘과 설명 텍스트 포함. Interaction: 미세한 호버 효과. Justification: 각 중요성을 시각적으로 분리하고 아이콘을 통해 빠른 의미 전달. Library/Method: HTML/Tailwind.
+        - 효과적인 파일 관리 방법:
+            - 2.1. 일관된 폴더 구조 만들기: Goal: Organize/Inform. Viz/Presentation: 설명 텍스트와 함께 `<code>` 스타일 블록으로 폴더 경로 예시 제시. Interaction: 없음. Justification: 계층적 예시를 명확하게 보여줌. Library/Method: HTML/Tailwind.
+            - 2.2. 명확하고 일관된 파일 이름 지정: Goal: Organize/Inform. Viz/Presentation: 설명 텍스트와 함께 `<code>` 스타일 블록으로 파일명 예시 및 피해야 할 특수문자 목록 제시. Interaction: 없음. Justification: 명확한 규칙과 예시 전달. Library/Method: HTML/Tailwind.
+            - 2.3. 정기적인 백업 습관화: Goal: Inform. Viz/Presentation: 유니코드 아이콘을 포함한 목록 형태. Interaction: 없음. Justification: 간결한 팁 제공. Library/Method: HTML/Tailwind.
+            - 2.4. 불필요한 파일 정리 및 삭제: Goal: Inform. Viz/Presentation: 목록 형태. Interaction: 없음. Justification: 실행 가능한 단계 제시. Library/Method: HTML/Tailwind.
+            - 2.5. 검색 기능 활용 및 태그/레이블 사용: Goal: Inform. Viz/Presentation: 목록 형태. Interaction: 없음. Justification: 실용적인 조언 제공. Library/Method: HTML/Tailwind.
+        - 참고: 본 가이드의 내용은 정성적 정보 위주이므로, Chart.js나 Plotly.js를 사용한 데이터 시각화 차트(예: 막대, 선, 파이 차트)는 적용하지 않았습니다. 대신, 정보 구조화 및 가독성 향상을 위해 HTML과 Tailwind CSS를 활용한 시각적 레이아웃(카드, 목록, 코드 블록 스타일 등)을 사용했습니다.
+        CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. 
+    -->
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            background-color: #f8f9fa; /* Light warm gray */
+            color: #212529; /* Dark gray for text */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Tailwind CSS Utility Classes (Inlined for Notion Compatibility) */
+        .antialiased { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+        /* Colors */
+        .bg-white { background-color: #ffffff; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-800 { color: #1f2937; }
+        .text-sky-500 { color: #0ea5e9; }
+        .text-sky-600 { color: #0284c7; }
+        .text-sky-700 { color: #0369a1; }
+        .bg-sky-50 { background-color: #f0f9ff; }
+        .border-gray-200 { border-color: #e5e7eb; }
+        .text-gray-500 { color: #6b7280; }
+
+        /* Spacing */
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .pt-24 { padding-top: 6rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mb-10 { margin-bottom: 2.5rem; }
+        .mb-12 { margin-bottom: 3rem; }
+        .mb-16 { margin-bottom: 4rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-3 { margin-top: 0.75rem; }
+        .mt-12 { margin-top: 3rem; }
+        .mt-16 { margin-top: 4rem; }
+        .ml-4 { margin-left: 1rem; }
+        .space-x-2 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.5rem; }
+        .space-x-4 > :not([hidden]) ~ :not([hidden]) { margin-left: 1rem; }
+        .space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.5rem; }
+        .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
+
+        /* Layout & Positioning */
+        .container { width: 100%; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .h-16 { height: 4rem; }
+        .sticky { position: sticky; }
+        .top-0 { top: 0; }
+        .z-50 { z-index: 50; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .gap-6 { gap: 1.5rem; }
+        .text-center { text-align: center; }
+        .list-disc { list-style-type: disc; }
+        .list-inside { list-style-position: inside; }
+        .max-w-2xl { max-width: 42rem; }
+        .max-w-xl { max-width: 36rem; }
+
+        /* Typography */
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-base { font-size: 1rem; line-height: 1.5rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        .leading-relaxed { line-height: 1.625; }
+
+        /* Borders & Shadows */
+        .rounded-md { border-radius: 0.375rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); }
+        .border-t { border-top-width: 1px; }
+
+        /* Transitions & Transforms */
+        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        .duration-300 { transition-duration: 300ms; }
+
+        /* Responsive (sm, md, lg) */
+        @media (min-width: 640px) { /* sm */
+            .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .sm\:space-x-4 > :not([hidden]) ~ :not([hidden]) { margin-left: 1rem; }
+            .sm\:text-base { font-size: 1rem; line-height: 1.5rem; }
+        }
+
+        @media (min-width: 768px) { /* md */
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (min-width: 1024px) { /* lg */
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+
+        /* Custom classes from previous immersive */
+        .nav-link.active {
+            color: #0ea5e9; /* Sky 500 */
+            font-weight: 600;
+            border-bottom: 2px solid #0ea5e9;
+        }
+        .code-block {
+            background-color: #e9ecef; /* Lighter gray for code blocks */
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 0.9em;
+            color: #495057; /* Slightly darker gray for code text */
+            word-break: break-all;
+        }
+        .icon-style {
+            font-size: 1.75rem; /* Larger icons */
+            color: #0ea5e9; /* Sky 500 for icons */
+            margin-bottom: 0.5rem;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav id="navbar" class="bg-white shadow-md sticky top-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-center h-16">
+                <div class="flex space-x-2 sm:space-x-4 text-sm sm:text-base">
+                    <a href="#importance" class="nav-link text-gray-600 hover:text-sky-500 px-2 py-2 rounded-md">파일 관리의 중요성</a>
+                    <a href="#folder-structure" class="nav-link text-gray-600 hover:text-sky-500 px-2 py-2 rounded-md">폴더 구조</a>
+                    <a href="#file-naming" class="nav-link text-gray-600 hover:text-sky-500 px-2 py-2 rounded-md">파일 이름</a>
+                    <a href="#backup" class="nav-link text-gray-600 hover:text-sky-500 px-2 py-2 rounded-md">백업</a>
+                    <a href="#cleanup" class="nav-link text-gray-600 hover:text-sky-500 px-2 py-2 rounded-md">정리/삭제</a>
+                    <a href="#search-tags" class="nav-link text-gray-600 hover:text-sky-500 px-2 py-2 rounded-md">검색/태그</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-sky-600">학생을 위한 효과적인 파일 관리 가이드</h1>
+            <p class="mt-3 text-lg text-gray-600">체계적인 파일 관리로 학업 효율성을 높여보세요!</p>
+        </header>
+
+        <section id="importance" class="mb-16 scroll-mt-20">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-8 text-center">1. 파일 관리, 왜 중요할까요?</h2>
+            <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+                파일 관리는 단순히 파일을 정리하는 것을 넘어, 학업 성과와 직결되는 중요한 기술입니다. 잘 정리된 디지털 환경은 학습 효율을 높이고 불필요한 시간 낭비를 줄여줍니다.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-lg transition-all duration-300 card-hover">
+                    <div class="icon-style">🔍</div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">정보의 빠른 검색</h3>
+                    <p class="text-gray-600 text-sm">필요한 자료를 신속하게 찾아 시험 기간이나 과제 제출 시 시간을 절약할 수 있습니다.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg transition-all duration-300 card-hover">
+                    <div class="icon-style">🛡️</div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">데이터 손실 방지</h3>
+                    <p class="text-gray-600 text-sm">중요한 파일 위치를 명확히 알고 정기적으로 백업하여 데이터 손실 위험을 줄입니다.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg transition-all duration-300 card-hover">
+                    <div class="icon-style">📈</div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">작업 효율성 향상</h3>
+                    <p class="text-gray-600 text-sm">체계적인 관리는 작업 흐름을 원활하게 하고, 여러 프로젝트 진행 시 혼란을 줄입니다.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg transition-all duration-300 card-hover">
+                    <div class="icon-style">🤝</div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">협업의 용이성</h3>
+                    <p class="text-gray-600 text-sm">잘 정리된 파일 구조는 다른 사람과의 파일 공유 및 협업을 더욱 효율적으로 만듭니다.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg transition-all duration-300 card-hover">
+                    <div class="icon-style">🧹</div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">디지털 공간 정리</h3>
+                    <p class="text-gray-600 text-sm">불필요한 파일을 제거하여 저장 공간을 확보하고 컴퓨터 성능을 향상시킬 수 있습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="methods" class="mb-16">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-8 text-center">2. 효과적인 파일 관리 방법</h2>
+            <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+                다음은 학업 효율을 극대화할 수 있는 구체적인 파일 관리 방법들입니다. 꾸준히 실천하여 자신만의 효율적인 시스템을 만들어보세요.
+            </p>
+
+            <div id="folder-structure" class="bg-white p-6 rounded-lg shadow-lg mb-8 scroll-mt-20">
+                <h3 class="text-2xl font-semibold text-sky-600 mb-4">2.1. 일관된 폴더 구조 만들기</h3>
+                <p class="text-gray-600 mb-3">논리적이고 일관된 폴더 구조는 파일 탐색 시간을 크게 줄여줍니다. 너무 복잡하지 않게, 자신에게 맞는 체계를 만드세요.</p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2 mb-4 text-sm">
+                    <li><strong>주제별 분류:</strong> 과목, 프로젝트, 학년도 등 큰 범주로 폴더를 나눕니다.
+                        <p class="mt-1 ml-4">예: <code class="code-block">내 문서/2025학년도/1학기/수학</code></p>
+                        <p class="mt-1 ml-4">예: <code class="code-block">내 문서/프로젝트/과학 탐구 대회</code></p>
+                    </li>
+                    <li><strong>세부 분류:</strong> 각 큰 범주 안에 강의자료, 과제, 시험자료 등 세부 폴더를 만듭니다.
+                        <p class="mt-1 ml-4">예: <code class="code-block">수학/강의자료</code>, <code class="code-block">수학/과제</code></p>
+                    </li>
+                    <li><strong>계층 구조 유지:</strong> 너무 깊은 폴더 계층(3~4단계 이내 권장)은 피하는 것이 좋습니다.</li>
+                </ul>
+            </div>
+
+            <div id="file-naming" class="bg-white p-6 rounded-lg shadow-lg mb-8 scroll-mt-20">
+                <h3 class="text-2xl font-semibold text-sky-600 mb-4">2.2. 명확하고 일관된 파일 이름 지정</h3>
+                <p class="text-gray-600 mb-3">파일 이름만 보고도 내용을 파악할 수 있도록 명확하고 일관된 규칙을 적용하세요.</p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2 mb-4 text-sm">
+                    <li><strong>정보 포함:</strong> 파일 이름에 파일의 내용, 날짜, 버전 등 중요한 정보를 포함합니다.</li>
+                    <li><strong>일관된 형식:</strong> 자신만의 파일 이름 지정 규칙(예: <code class="code-block">[과목명]_[날짜]_[내용]_[버전]</code>)을 정하고 꾸준히 사용합니다.
+                        <p class="mt-1 ml-4">예: <code class="code-block">수학_20250522_미적분_과제1_v1.docx</code></p>
+                        <p class="mt-1 ml-4">예: <code class="code-block">역사_20250515_고려시대_발표자료.pptx</code></p>
+                    </li>
+                    <li><strong>특수 문자 피하기:</strong> 파일 이름에 <code class="code-block">/ \ : * ? " &lt; &gt; |</code> 등 특수 문자를 사용하지 않습니다. (공백 대신 언더바(_) 사용 권장)</li>
+                </ul>
+            </div>
+
+            <div id="backup" class="bg-white p-6 rounded-lg shadow-lg mb-8 scroll-mt-20">
+                <h3 class="text-2xl font-semibold text-sky-600 mb-4">2.3. 정기적인 백업 습관화 💾</h3>
+                 <p class="text-gray-600 mb-3">소중한 자료를 안전하게 지키기 위해 정기적인 백업은 필수입니다. 다양한 방법을 활용하세요.</p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2 text-sm">
+                    <li><strong>☁️ 클라우드 저장소 활용:</strong> Google Drive, OneDrive, Dropbox 등 클라우드 서비스를 이용하여 파일을 자동으로 동기화하고 백업합니다.</li>
+                    <li><strong>💾 외장 하드 드라이브/USB:</strong> 중요한 파일은 외장 하드 드라이브나 USB에 주기적으로 백업합니다. (최소 2곳 이상 분산 백업 권장)</li>
+                    <li><strong>🗓️ 백업 주기 설정:</strong> 주간 또는 월간 단위로 백업 일정을 정하고 꾸준히 실행합니다.</li>
+                </ul>
+            </div>
+
+            <div id="cleanup" class="bg-white p-6 rounded-lg shadow-lg mb-8 scroll-mt-20">
+                <h3 class="text-2xl font-semibold text-sky-600 mb-4">2.4. 불필요한 파일 정리 및 삭제 🗑️</h3>
+                <p class="text-gray-600 mb-3">디지털 공간도 주기적인 정리가 필요합니다. 저장 공간을 확보하고 시스템 효율을 높이세요.</p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2 text-sm">
+                    <li><strong>정기적인 검토:</strong> 주기적으로 폴더를 검토하여 더 이상 필요 없는 파일이나 중복 파일을 삭제합니다.</li>
+                    <li><strong>다운로드 폴더 관리:</strong> 다운로드 폴더는 임시 저장 공간으로 사용하고, 필요한 파일은 즉시 적절한 폴더로 이동하거나 삭제합니다.</li>
+                    <li><strong>휴지통 비우기:</strong> 파일을 삭제한 후에는 정기적으로 휴지통을 비워 저장 공간을 완전히 확보합니다.</li>
+                </ul>
+            </div>
+
+            <div id="search-tags" class="bg-white p-6 rounded-lg shadow-lg scroll-mt-20">
+                <h3 class="text-2xl font-semibold text-sky-600 mb-4">2.5. 검색 기능 활용 및 태그/레이블 사용 🏷️</h3>
+                <p class="text-gray-600 mb-3">파일을 빠르게 찾기 위해 운영체제의 검색 기능을 적극 활용하고, 필요에 따라 태그나 레이블을 사용하세요.</p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2 text-sm">
+                    <li><strong>운영체제 검색 기능:</strong> Windows 탐색기나 macOS Finder의 고급 검색 기능을 익혀두면 유용합니다. (파일 내용 검색, 특정 유형 검색 등)</li>
+                    <li><strong>태그/레이블:</strong> 중요한 파일이나 프로젝트 관련 파일에 태그나 레이블(색상 등)을 추가하여 시각적으로 구분하고 검색 효율성을 높입니다. (일부 운영체제나 클라우드 서비스에서 지원)</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="text-center mt-16 py-8 bg-sky-50 rounded-lg">
+            <h2 class="text-2xl font-semibold text-sky-700 mb-4">파일 관리, 습관이 중요합니다!</h2>
+            <p class="text-gray-700 max-w-xl mx-auto leading-relaxed">
+                이러한 파일 관리 습관을 통해 학생들은 디지털 환경을 효율적으로 관리하고, 학업 스트레스를 줄이며, 궁극적으로 학습 성과를 향상시킬 수 있을 것입니다. 지금 바로 시작해보세요!
+            </p>
+        </section>
+
+    </div>
+
+    <footer class="text-center py-8 mt-12 border-t border-gray-200">
+        <p class="text-sm text-gray-500">&copy; 2025 학생 파일 관리 가이드. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section[id], div[id^="folder-"], div[id^="file-"], div[id^="backup"], div[id^="cleanup"], div[id^="search-"]');
+            const navbar = document.getElementById('navbar');
+            const navbarHeight = navbar.offsetHeight;
+
+            // Smooth scroll
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - navbarHeight - 20; // Add some extra padding
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Active link highlighting on scroll
+            function updateActiveLink() {
+                let currentSectionId = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - navbarHeight - 25) { // Adjusted offset
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', updateActiveLink);
+            updateActiveLink(); // Initial check
+        });
+    </script>
+
+</body>
+</html>
